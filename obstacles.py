@@ -175,6 +175,7 @@ def game_over(window, size):
 
     # window를 검은색으로 칠하고 설정했던 글자를 window에 복사합니다.
     # Fill window as black and copy 'Game Over' strings to main window.
+    
     window.fill(black)
     window.blit(game_over_surface, game_over_rect)
 
@@ -212,6 +213,19 @@ def get_keyboard(key, cur_dir):
     # Return current direction if none of keyboard input occured
     return cur_dir
 
+#Grass tiles
+def draw_grass_pattern(window, frame, tile_size=20):
+    #coloring
+    light_green = pygame.Color(170, 215, 81)
+    dark_green = pygame.Color(162, 209, 73)
+
+    rows = frame[1] // tile_size
+    cols = frame[0] // tile_size
+
+    for row in range(rows):
+        for col in range(cols):
+            color = light_green if (row + col) % 2 == 0 else dark_green
+            pygame.draw.rect(window, color, (col * tile_size, row * tile_size, tile_size, tile_size))
 # %% [markdown]
 # #### 2. 메인 프로그램
 # Game이 동작하기 위한 메인 코드 입니다.
@@ -242,7 +256,7 @@ while True:
                 # 입력 키로 방향을 얻어냅니다.
                 # Get direction with key
                 direction = get_keyboard(event.key, direction)
-
+    
     # 실제로 뱀의 위치를 옮깁니다.
     # Move the actual snake position
     if direction == 'UP':
@@ -253,7 +267,7 @@ while True:
         snake_pos[0] -= 10
     if direction == 'RIGHT':
         snake_pos[0] += 10
-
+    
     # 우선 증가시키고 음식의 위치가 아니라면 마지막을 뺍니다.
     # Grow snake first, check if food is on sanke head(if not, delete last)
     snake_body.insert(0, list(snake_pos))
@@ -280,15 +294,17 @@ while True:
 
     # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
     # Fill the screen black and draw each position of snake
-    main_window.fill(black)
+    #main_window.fill(black)
+    # Fill the screen black
+    draw_grass_pattern(main_window, frame)
     for pos in snake_body:
-        pygame.draw.rect(main_window, green,
+        pygame.draw.rect(main_window, blue,
                          pygame.Rect(pos[0], pos[1], 10, 10))
 
     # 음식을 그립니다.
-    # Draw snake food
-    pygame.draw.rect(main_window, white,
-                     pygame.Rect(food_pos[0], food_pos[1], 10, 10))
+    # Draw snake food - circle
+    pygame.draw.circle(main_window, white, (food_pos[0] + 5, food_pos[1] + 5), 5)
+
 
     # 방해를 그립니다.
     # Draw obstacles 
