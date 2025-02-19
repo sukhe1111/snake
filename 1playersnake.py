@@ -142,7 +142,7 @@ def Init(size):
 
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
     # Initialise game window using pygame.display
-    pygame.display.set_caption('Snake Example with PyGame')
+    pygame.display.set_caption('Snake 1 Player')
     game_window = pygame.display.set_mode(size)
     return game_window
 
@@ -231,13 +231,13 @@ def get_keyboard(key, cur_dir):
     # 방향이 반대방향이면 무시합니다.
     # Chnage direction using WASD or arrow key
     # Ignore keyboard input if input key has opposite direction
-    if direction != 'DOWN' and key == pygame.K_UP or key == ord('w'):
+    if direction != 'DOWN' and (key == pygame.K_UP or key == ord('w')):
         return 'UP'
-    if direction != 'UP' and key == pygame.K_DOWN or key == ord('s'):
+    if direction != 'UP' and (key == pygame.K_DOWN or key == ord('s')):
         return 'DOWN'
-    if direction != 'RIGHT' and key == pygame.K_LEFT or key == ord('a'):
+    if direction != 'RIGHT' and (key == pygame.K_LEFT or key == ord('a')):
         return 'LEFT'
-    if direction != 'LEFT' and key == pygame.K_RIGHT or key == ord('d'):
+    if direction != 'LEFT' and (key == pygame.K_RIGHT or key == ord('d')):
         return 'RIGHT'
     # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
     # Return current direction if none of keyboard input occured
