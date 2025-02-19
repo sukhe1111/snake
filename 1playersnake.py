@@ -67,6 +67,8 @@ white = pygame.Color(255, 255, 255)
 red = pygame.Color(255, 0, 0)
 green = pygame.Color(0, 255, 0)
 blue = pygame.Color(0, 0, 255)
+yellow = pygame.Color(255, 255, 0)
+gray = pygame.Color(128, 128, 128)
 
 # 시간을 흐르게 하기 위한 FPS counter
 # FPS (frames per second) controller
@@ -87,6 +89,15 @@ obstacles = []
 direction = 'RIGHT'
 
 score = 0
+
+special_fruit = None
+special_fruit_timer = None
+
+def spawn_special_fruit():
+    global special_fruit, special_fruit_timer
+    special_fruit = [random.randrange(1, (frame[0]//10)) * 10,
+            random.randrange(1, (frame[1]//10)) * 10]
+    special_fruit_timer = time.time()  # Record spawn time
 
 # %% [markdown]
 # ##### 1-2. Pygame 초기화(Initialize Pygame)
@@ -292,6 +303,18 @@ while True:
         generate_obstacles(score) 
         food_spawn = True
 
+    if special_fruit is None and random.randrange(1, 100) > 98:
+        spawn_special_fruit()
+
+    # Check if snake eats special fruit
+    if special_fruit and snake_pos == special_fruit:
+        score += 5  # Give 5 points
+        special_fruit = None  # Remove special fruit
+
+
+    if special_fruit and time.time() - special_fruit_timer > 5:
+        special_fruit = None
+
     # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
     # Fill the screen black and draw each position of snake
     #main_window.fill(black)
@@ -305,11 +328,12 @@ while True:
     # Draw snake food - circle
     pygame.draw.circle(main_window, white, (food_pos[0] + 5, food_pos[1] + 5), 5)
 
-
+    if special_fruit:
+        pygame.draw.circle(main_window, red, (special_fruit[0] + 6, special_fruit[1] + 6), 6)
     # 방해를 그립니다.
     # Draw obstacles 
     for obs in obstacles:
-                     pygame.draw.rect(main_window, red, pygame.Rect(obs[0], obs[1], 10, 10))
+                     pygame.draw.rect(main_window, gray, pygame.Rect(obs[0], obs[1], 10, 10))
 
     # Game Over 상태를 확인합니다.
     # Check Game Over conditions
@@ -338,6 +362,3 @@ while True:
     # 해당 FPS만큼 대기합니다.
     # Refresh rate
     fps_controller.tick(fps)
-
-
-# %%

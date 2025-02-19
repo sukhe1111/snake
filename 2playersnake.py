@@ -88,7 +88,6 @@ food_spawn = True
 direction = 'RIGHT'
 direction2 = 'RIGHT'
 
-score = 0
 
 # %% [markdown]
 # ##### 1-2. Pygame 초기화(Initialize Pygame)
@@ -119,7 +118,7 @@ def Init(size):
 
     # pygame.display를 통해 제목, window size를 설정하고 초기화합니다.
     # Initialise game window using pygame.display
-    pygame.display.set_caption('Snake Example with PyGame')
+    pygame.display.set_caption('Snake 2 player')
     game_window = pygame.display.set_mode(size)
     return game_window
 
@@ -132,25 +131,6 @@ def Init(size):
 # You can see more details in comments on each cell.
 
 
-# %%
-# Score
-def show_score(window, size, choice, color, font, fontsize):
-    # Score를 띄우기 위한 설정입니다.
-    # Settings for showing score on screen
-    score_font = pygame.font.SysFont(font, fontsize)
-    score_surface = score_font.render('Score : ' + str(score), True, color)
-    score_rect = score_surface.get_rect()
-
-    # Game over 상황인지 게임중 상황인지에 따라 다른 위치를 선정합니다.
-    # Select different location depending on the situation.
-    if choice == 1:
-        score_rect.midtop = (size[0]/10, 15)
-    else:
-        score_rect.midtop = (size[0]/2, size[1]/1.25)
-
-    # 설정한 글자를 window에 복사합니다.
-    # Copy the string to windows
-    window.blit(score_surface, score_rect)
 
 # %%
 # Game Over
@@ -172,7 +152,6 @@ def game_over(window, size, snake):
 
     # 'show_score' 함수를 부릅니다.
     # Call 'show_score' function.
-    show_score(window, size, 0, green, 'times', 20)
 
     # 그려진 화면을 실제로 띄워줍니다.
     # Show drawn windows to screen
@@ -220,6 +199,19 @@ def get_keyboard2(key, cur_dir):
     # 모두 해당하지 않다면 원래 방향을 돌려줍니다.
     # Return current direction if none of keyboard input occured
     return cur_dir
+
+def draw_grass_pattern(window, frame, tile_size=20):
+    #coloring
+    light_green = pygame.Color(170, 215, 81)
+    dark_green = pygame.Color(162, 209, 73)
+
+    rows = frame[1] // tile_size
+    cols = frame[0] // tile_size
+
+    for row in range(rows):
+        for col in range(cols):
+            color = light_green if (row + col) % 2 == 0 else dark_green
+            pygame.draw.rect(window, color, (col * tile_size, row * tile_size, tile_size, tile_size))
 
 # %% [markdown]
 # #### 2. 메인 프로그램
@@ -278,12 +270,10 @@ while True:
     snake_body.insert(0, list(snake_pos))
     snake_body2.insert(0, list(snake_pos2))
     if snake_pos[0] == food_pos[0] and snake_pos[1] == food_pos[1]:
-        score += 1
         food_spawn = False
     else:
         snake_body.pop()
     if snake_pos2[0] == food_pos[0] and snake_pos2[1] == food_pos[1]:
-        score += 1
         food_spawn = False
     else:
         snake_body2.pop()
@@ -299,9 +289,9 @@ while True:
 
     # 우선 게임을 검은 색으로 채우고 뱀의 각 위치마다 그림을 그립니다.
     # Fill the screen black and draw each position of snake
-    main_window.fill(black)
+    draw_grass_pattern(main_window, frame)
     for pos in snake_body:
-        pygame.draw.rect(main_window, green,
+        pygame.draw.rect(main_window, blue,
                          pygame.Rect(pos[0], pos[1], 10, 10))
         
     for pos in snake_body2:
@@ -310,8 +300,7 @@ while True:
 
     # 음식을 그립니다.
     # Draw snake food
-    pygame.draw.rect(main_window, white,
-                     pygame.Rect(food_pos[0], food_pos[1], 10, 10))
+    pygame.draw.circle(main_window, white, (food_pos[0] + 5, food_pos[1] + 5), 5)
 
     # Game Over 상태를 확인합니다.
     # Check Game Over conditions
@@ -356,7 +345,6 @@ while True:
 
     # 점수를 띄워줍니다.
     # Show score with defined function
-    show_score(main_window, frame, 1, white, 'consolas', 20)
 
     # 실제 화면에 보이도록 업데이트 해줍니다.
     # Refresh game screen
