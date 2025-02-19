@@ -93,6 +93,20 @@ score = 0
 special_fruit = None
 special_fruit_timer = None
 
+def load_highest_score():
+    try:
+        with open("highest_score.txt", "r") as file:
+            return int(file.read())
+    except FileNotFoundError:
+        return 0
+    
+highest_score = load_highest_score() 
+
+# Function to save highest score to a file
+def save_highest_score(score):
+    with open("highest_score.txt", "w") as file:
+        file.write(str(score))
+
 def spawn_special_fruit():
     global special_fruit, special_fruit_timer
     special_fruit = [random.randrange(1, (frame[0]//10)) * 10,
@@ -163,16 +177,21 @@ def show_score(window, size, choice, color, font, fontsize):
     score_surface = score_font.render('Score : ' + str(score), True, color)
     score_rect = score_surface.get_rect()
 
+    highest = score_font.render('Highest Score : ' + str(highest_score), True, white)
+    score_highest = highest.get_rect()   
     # Game over 상황인지 게임중 상황인지에 따라 다른 위치를 선정합니다.
     # Select different location depending on the situation.
     if choice == 1:
         score_rect.midtop = (size[0]/10, 15)
+        score_highest.midtop = (size[0]/10 + 200, 15)
     else:
         score_rect.midtop = (size[0]/2, size[1]/1.25)
+        score_highest.midtop = (size[0]/2, size[1]/1.25 + 30)
 
     # 설정한 글자를 window에 복사합니다.
     # Copy the string to windows
     window.blit(score_surface, score_rect)
+    window.blit(highest, score_highest)
 
 # %%
 # Game Over
@@ -353,6 +372,11 @@ while True:
 
     # 점수를 띄워줍니다.
     # Show score with defined function
+
+    if score > highest_score:
+        highest_score = score
+        save_highest_score(highest_score)
+
     show_score(main_window, frame, 1, white, 'consolas', 20)
 
     # 실제 화면에 보이도록 업데이트 해줍니다.
