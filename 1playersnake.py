@@ -102,6 +102,15 @@ def load_highest_score():
     
 highest_score = load_highest_score() 
 
+def load_max_obstacles():
+    try:
+        with open("max_obstacles.txt", "r") as file:
+            return int(file.read())
+    except FileNotFoundError:
+        return 5
+    
+max_obstacles = load_max_obstacles() 
+
 # Function to save highest score to a file
 def save_highest_score(score):
     with open("highest_score.txt", "w") as file:
@@ -157,7 +166,7 @@ def Init(size):
 # Function to generate new obstacles
 def generate_obstacles(score, food):
     obs = True
-    num_obstacles = min(score // 5+1, 6)  # Increase obstacles every 5 points, max 5
+    num_obstacles = min(score // 5+1, max_obstacles)  # Increase obstacles every 5 points, max 5
     obstacles.clear()  # Clear previous obstacles
     for _ in range(num_obstacles):
         obs = True
@@ -203,6 +212,7 @@ def show_score(window, size, choice, color, font, fontsize):
 # %%
 # Game Over
 def game_over(window, size):
+    time.sleep(1)
     # 'Game Over'문구를 띄우기 위한 설정입니다.
     # Settings of the 'Game Over' string to show on the screen
     my_font = pygame.font.SysFont('times new roman', 90)

@@ -135,6 +135,7 @@ def Init(size):
 # %%
 # Game Over
 def game_over(window, size, snake):
+    time.sleep(1)
     # 'Game Over'문구를 띄우기 위한 설정입니다.
     # Settings of the 'Game Over' string to show on the screen
     my_font = pygame.font.SysFont('times new roman', 90)
