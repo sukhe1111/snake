@@ -150,7 +150,7 @@ def game_menu():
         mouse_pos = pygame.mouse.get_pos()
         hovering = False  # Track if mouse is over a button
 
-        if play1_button.collidepoint(mouse_pos) or play2_button.collidepoint(mouse_pos) or quit_button.collidepoint(mouse_pos):
+        if play1_button.collidepoint(mouse_pos) or play2_button.collidepoint(mouse_pos) or help_button.collidepoint(mouse_pos) or settings_button.collidepoint(mouse_pos) or quit_button.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(hand_cursor)
             hovering = True
         if not hovering:  # Reset cursor if not hovering over any button
