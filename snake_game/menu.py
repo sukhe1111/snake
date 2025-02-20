@@ -75,7 +75,7 @@ help_button = pygame.Rect(frame[0]//2 - 95, 230, 200, 50)
 settings_button = pygame.Rect(frame[0]//2 - 95, 300, 200, 50)
 quit_button = pygame.Rect(frame[0]//2 - 95, 370, 200, 50)
 
-background_image = pygame.image.load('D:/Code/snake/snake/background.jpg')  # Replace with your image path
+background_image = pygame.image.load('./snake/snake_game/background.jpg')  # Replace with your image path
 background_image = pygame.transform.scale(background_image, (frame[0], frame[1])) 
 
 def draw_button(text, rect, color, hover_color, mouse_pos):
@@ -91,7 +91,7 @@ def draw_button(text, rect, color, hover_color, mouse_pos):
 
 def load_highest_score():
     try:
-        with open("highest_score.txt", "r") as file:
+        with open("./snake/highest_score.txt", "r") as file:
             return int(file.read())
     except FileNotFoundError:
         return 0
@@ -101,7 +101,7 @@ highest_score = load_highest_score()
 
 def load_max_obstacles():
     try:
-        with open("max_obstacles.txt", "r") as file:
+        with open("./snake/max_obstacles.txt", "r") as file:
             return int(file.read())
     except FileNotFoundError:
         return 5
@@ -110,7 +110,7 @@ max_obstacles = load_max_obstacles()
 
 # Function to save highest score to a file
 def save_max_obstacles(obs):
-    with open("max_obstacles.txt", "w") as file:
+    with open("./snake/max_obstacles.txt", "w") as file:
         file.write(str(obs))
 
 
@@ -170,9 +170,9 @@ def game_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:  # Detect mouse click
                 if play1_button.collidepoint(event.pos):
-                    subprocess.run(["python", "./snake/1playersnake.py"])
+                    subprocess.run(["python", "./snake/snake_game/1playersnake.py"])
                 if play2_button.collidepoint(event.pos):
-                    subprocess.run(["python", "./snake/2playersnake.py"])
+                    subprocess.run(["python", "./snake/snake_game/2playersnake.py"])
                 if help_button.collidepoint(event.pos):
                     show_rules()
                 if settings_button.collidepoint(event.pos):

@@ -95,7 +95,7 @@ special_fruit_timer = None
 
 def load_highest_score():
     try:
-        with open("highest_score.txt", "r") as file:
+        with open("snake/highest_score.txt", "r") as file:
             return int(file.read())
     except FileNotFoundError:
         return 0
@@ -104,7 +104,7 @@ highest_score = load_highest_score()
 
 def load_max_obstacles():
     try:
-        with open("max_obstacles.txt", "r") as file:
+        with open("snake/max_obstacles.txt", "r") as file:
             return int(file.read())
     except FileNotFoundError:
         return 5
@@ -113,7 +113,7 @@ max_obstacles = load_max_obstacles()
 
 # Function to save highest score to a file
 def save_highest_score(score):
-    with open("highest_score.txt", "w") as file:
+    with open("snake/highest_score.txt", "w") as file:
         file.write(str(score))
 
 def spawn_special_fruit():
