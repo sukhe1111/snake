@@ -45,18 +45,9 @@ import pygame
 import random
 import time
 
-# %% [markdown]
-# ##### 1-1. 게임 사전 설정(Settings on the game)
-# 게임에 대한 기본적인 설정에 대한 변수 들을 미리 정의합니다.
-#
-# Define variables that initializes the game
 
-# %%
-# Frame 수 조절(초당 그려지는 수)
-# Framerate per seconds
 fps = 15
 
-# 창의 크기
 # Window size
 frame = (720, 480)
 
@@ -86,16 +77,24 @@ background_image = pygame.image.load('D:/Code/snake/snake/background.jpg')  # Re
 background_image = pygame.transform.scale(background_image, (frame[0], frame[1])) 
 
 def draw_button(text, rect, color, hover_color, mouse_pos):
-    score_font = pygame.font.SysFont('times new roman', 50)
+    score_font = pygame.font.SysFont('times new roman', 40)
     if rect.collidepoint(mouse_pos):  
-        pygame.draw.rect(main_window, hover_color, rect, border_radius=0)  # Hover color
+        pygame.draw.rect(main_window, hover_color, rect, border_radius=0)
     else:
-        pygame.draw.rect(main_window, color, rect, border_radius=0)  # Normal color
+        pygame.draw.rect(main_window, color, rect, border_radius=0) 
 
     text_surface = score_font.render(text, True, black)
     text_rect = text_surface.get_rect(center=rect.center)
     screen.blit(text_surface, text_rect)
 
+def load_highest_score():
+    try:
+        with open("highest_score.txt", "r") as file:
+            return int(file.read())
+    except FileNotFoundError:
+        return 0
+    
+highest_score = load_highest_score() 
 
 
 # %%
@@ -119,10 +118,26 @@ def Init(size):
 
 menu_color = pygame.Color(153, 204, 255)
 def game_menu():
+    hand_cursor = pygame.SYSTEM_CURSOR_HAND
+    arrow_cursor = pygame.SYSTEM_CURSOR_ARROW
     while True:
-        screen.blit(background_image, (0, 0))
+        
 
-        mouse_pos = pygame.mouse.get_pos()  # Get current mouse position
+        screen.blit(background_image, (0, 0))
+        score_font = pygame.font.SysFont("consolas", 20)
+        score_surface = score_font.render('Highest Score : ' + str(highest_score), True, black)
+        score_rect = score_surface.get_rect()
+        score_rect.midtop = (frame[0]/10 + 50, 15)
+        main_window.blit(score_surface, score_rect)
+
+        mouse_pos = pygame.mouse.get_pos()
+        hovering = False  # Track if mouse is over a button
+
+        if play1_button.collidepoint(mouse_pos) or play2_button.collidepoint(mouse_pos) or quit_button.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(hand_cursor)
+            hovering = True
+        if not hovering:  # Reset cursor if not hovering over any button
+            pygame.mouse.set_cursor(arrow_cursor)
 
         draw_button("1 Player", play1_button, green, (0, 200, 0), mouse_pos)
         draw_button("2 Players", play2_button, green, (0, 200, 0), mouse_pos)
@@ -136,9 +151,9 @@ def game_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:  # Detect mouse click
                 if play1_button.collidepoint(event.pos):
-                    subprocess.run(["python", "D:/Code/snake/snake/1playersnake.py"])
+                    subprocess.run(["python", "./snake/1playersnake.py"])
                 if play2_button.collidepoint(event.pos):
-                    subprocess.run(["python", "D:/Code/snake/snake/2playersnake.py"])
+                    subprocess.run(["python", "./snake/2playersnake.py"])
                 if quit_button.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()

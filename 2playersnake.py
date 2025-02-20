@@ -78,8 +78,8 @@ fps_controller = pygame.time.Clock()
 snake_pos = [100, 50]
 snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
 
-snake_pos2 = [100, 450]
-snake_body2 = [[100, 450], [100-10, 450], [100-(2*10), 450]]
+snake_pos2 = [100, 430]
+snake_body2 = [[100, 430], [100-10, 430], [100-(2*10), 430]]
 
 food_pos = [random.randrange(1, (frame[0]//10)) * 10,
             random.randrange(1, (frame[1]//10)) * 10]
@@ -140,8 +140,10 @@ def game_over(window, size, snake):
     my_font = pygame.font.SysFont('times new roman', 90)
     if snake == 0:
         game_over_surface = my_font.render('Tie', True, red)
-    else:
-        game_over_surface = my_font.render('Player '+ str(snake)+ " wins", True, red)
+    elif snake == 1:
+        game_over_surface = my_font.render('Blue wins', True, red)
+    elif snake == 2:
+        game_over_surface = my_font.render('Red wins', True, red)
     game_over_rect = game_over_surface.get_rect()
     game_over_rect.midtop = (size[0]/2, size[1]/4)
 

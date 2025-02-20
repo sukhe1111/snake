@@ -155,13 +155,20 @@ def Init(size):
 # You can see more details in comments on each cell.
 
 # Function to generate new obstacles
-def generate_obstacles(score):
+def generate_obstacles(score, food):
+    obs = True
     num_obstacles = min(score // 5+1, 6)  # Increase obstacles every 5 points, max 5
     obstacles.clear()  # Clear previous obstacles
     for _ in range(num_obstacles):
+        obs = True
         new_obstacle = [random.randrange(1, (frame[0]//10)) * 10,
                         random.randrange(1, (frame[1]//10)) * 10]
-        obstacles.append(new_obstacle)
+        for pos in snake_body:
+            if pos == new_obstacle or food == new_obstacle:
+                obs = False
+                break
+        if obs:
+            obstacles.append(new_obstacle)
     
 # Check if snake collides with any obstacle
 def check_collision():
@@ -318,9 +325,13 @@ while True:
             random.randrange(1, (frame[0]//10)) * 10,
             random.randrange(1, (frame[1]//10)) * 10
         ]
+        
      # Update obstacles
-        generate_obstacles(score) 
+        generate_obstacles(score, food_pos) 
         food_spawn = True
+        for pos in snake_body:
+            if pos == food_pos:
+                food_spawn = False
 
     if special_fruit is None and random.randrange(1, 100) > 98:
         spawn_special_fruit()
